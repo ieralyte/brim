@@ -19,10 +19,10 @@ Each milestone ends with a tagged GitHub release. The riskiest work (private App
 - [x] Tray survives restarts
 - [x] Charging animation, low-battery alerts at 20% and 10%
 
-## v0.4 — Lock screen
-- [ ] Now Playing and battery on the lock screen (SkyLight)
-- [ ] Hidden immediately on unlock
-- [ ] Off switch in Settings; graceful fallback if private APIs fail
+## v0.4 — Lock screen ✅
+- [x] Now Playing and battery on the lock screen (SkyLight)
+- [x] Hidden immediately on unlock
+- [x] Off switch in Settings; graceful fallback if private APIs fail
 
 ## v0.5 — Release pipeline
 - [ ] GitHub Actions builds an ad-hoc signed DMG on each `v*` tag

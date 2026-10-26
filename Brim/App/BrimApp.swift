@@ -12,7 +12,8 @@ struct BrimApp: App {
         }
 
         Settings {
-            SettingsView(nowPlaying: appDelegate.nowPlaying, battery: appDelegate.battery)
+            SettingsView(nowPlaying: appDelegate.nowPlaying, battery: appDelegate.battery,
+                         lockScreen: appDelegate.lockScreen)
         }
     }
 }

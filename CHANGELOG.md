@@ -2,6 +2,13 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [0.4.0] - 2026-10-27
+
+### Added
+- Lock screen card: Now Playing with artwork and controls, plus battery level, shown below the clock while the Mac is locked, whether the track is playing or paused. When nothing is loaded it shows a small battery pill.
+- The card disappears the moment the Mac unlocks.
+- Settings → "Show on lock screen" turns it off; Diagnostics shows whether it is working.
+
 ## [0.3.0] - 2026-10-27
 
 ### Added
