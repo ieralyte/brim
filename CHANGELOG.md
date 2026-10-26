@@ -2,6 +2,18 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [0.3.0] - 2026-10-27
+
+### Added
+- File tray: drag files onto the notch to hold them and drag them back out. Double-click opens a file; hover to remove one, or clear them all. The tray survives restarts.
+- Charging notice in the closed island when you plug in, and low-battery alerts at 20% and 10%.
+- Battery level in the top corner of the open island.
+- Settings → Diagnostics shows battery status and can preview the alerts.
+
+### Changed
+- The open island is wider, with Now Playing on the left and the tray on the right.
+- The island stays open while the mouse button is held, so files can be dragged out of it.
+
 ## [0.2.0] - 2026-10-27
 
 ### Added

@@ -8,33 +8,51 @@ final class NotchViewModel {
         case open
     }
 
+    /// What the closed island is showing beside the notch, if anything.
+    enum LiveActivity: Equatable {
+        case battery(BatteryAlert)
+        case nowPlaying
+    }
+
     private(set) var state: State = .closed
 
     /// Size of the hardware notch, or of the fallback pill on screens without one.
     var closedSize: CGSize
 
     /// Size of the expanded island.
-    let openSize = CGSize(width: 520, height: 190)
+    let openSize = CGSize(width: 600, height: 190)
 
     let nowPlaying: NowPlayingService
+    let tray: FileTrayService
+    let battery: BatteryService
 
-    init(closedSize: CGSize, nowPlaying: NowPlayingService) {
+    /// A charging or low-battery notice, shown for a few seconds.
+    private(set) var batteryAlert: BatteryAlert?
+    @ObservationIgnored private var alertTask: Task<Void, Never>?
+
+    init(closedSize: CGSize, nowPlaying: NowPlayingService, tray: FileTrayService, battery: BatteryService) {
         self.closedSize = closedSize
         self.nowPlaying = nowPlaying
+        self.tray = tray
+        self.battery = battery
+        battery.onAlert = { [weak self] alert in self?.show(alert) }
     }
 
     var isOpen: Bool { state == .open }
 
-    /// While music plays, the closed island grows a "wing" either side of the notch.
-    var showsLiveActivity: Bool { nowPlaying.isPlaying }
+    /// Battery notices take priority over Now Playing.
+    var liveActivity: LiveActivity? {
+        if let batteryAlert { return .battery(batteryAlert) }
+        return nowPlaying.isPlaying ? .nowPlaying : nil
+    }
 
     var wingWidth: CGFloat { closedSize.height + 12 }
 
-    /// The closed island, including the Now Playing wings when they are showing.
+    /// The closed island, including the wings either side of the notch when an activity is showing.
     var closedDisplaySize: CGSize {
-        showsLiveActivity
-            ? CGSize(width: closedSize.width + wingWidth * 2, height: closedSize.height)
-            : closedSize
+        liveActivity == nil
+            ? closedSize
+            : CGSize(width: closedSize.width + wingWidth * 2, height: closedSize.height)
     }
 
     var currentSize: CGSize { isOpen ? openSize : closedDisplaySize }
@@ -47,6 +65,7 @@ final class NotchViewModel {
 
     func open() {
         guard state != .open else { return }
+        dismissAlert() // opening the island counts as seeing the notice
         withAnimation(.spring(response: 0.38, dampingFraction: 0.78)) {
             state = .open
         }
@@ -57,5 +76,22 @@ final class NotchViewModel {
         withAnimation(.spring(response: 0.2, dampingFraction: 1.0)) {
             state = .closed
         }
+    }
+
+    private func show(_ alert: BatteryAlert) {
+        alertTask?.cancel()
+        batteryAlert = alert
+        let duration: Duration = alert.kind == .charging ? .seconds(3) : .seconds(6)
+        alertTask = Task { [weak self] in
+            try? await Task.sleep(for: duration)
+            guard !Task.isCancelled else { return }
+            self?.dismissAlert()
+        }
+    }
+
+    private func dismissAlert() {
+        alertTask?.cancel()
+        alertTask = nil
+        batteryAlert = nil
     }
 }

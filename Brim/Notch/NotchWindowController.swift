@@ -2,22 +2,29 @@ import AppKit
 import SwiftUI
 
 /// Owns the notch panel: places it over the notch, watches the mouse,
-/// and opens or closes the island on hover.
+/// and opens or closes the island on hover or when a file is dragged to it.
 final class NotchWindowController: NSObject {
     private let nowPlaying: NowPlayingService
+    private let tray: FileTrayService
+    private let battery: BatteryService
     private var panel: NotchPanel?
     private var model: NotchViewModel?
     private var screen: NSScreen?
     private var monitors: [Any] = []
     private var closeTask: Task<Void, Never>?
+    /// The drag pasteboard's change count when the mouse last went down, so a
+    /// leftover pasteboard from an earlier drag is not mistaken for a new one.
+    private var dragChangeCount = NSPasteboard(name: .drag).changeCount
 
     /// Room around the open island so its shadow is not clipped.
     private let shadowPadding: CGFloat = 32
     /// How long the pointer must stay away before the island closes.
     private let closeDelay: Duration = .milliseconds(60)
 
-    init(nowPlaying: NowPlayingService) {
+    init(nowPlaying: NowPlayingService, tray: FileTrayService, battery: BatteryService) {
         self.nowPlaying = nowPlaying
+        self.tray = tray
+        self.battery = battery
         super.init()
     }
 
@@ -51,7 +58,7 @@ final class NotchWindowController: NSObject {
             existing.closedSize = closedSize
             model = existing
         } else {
-            model = NotchViewModel(closedSize: closedSize, nowPlaying: nowPlaying)
+            model = NotchViewModel(closedSize: closedSize, nowPlaying: nowPlaying, tray: tray, battery: battery)
             self.model = model
         }
 
@@ -77,21 +84,33 @@ final class NotchWindowController: NSObject {
         panel.orderFrontRegardless()
     }
 
-    // MARK: - Hover
+    // MARK: - Hover and drag
 
     private func installMouseMonitors() {
-        // Global: pointer moves while another app is frontmost (almost always).
-        if let global = NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved, handler: { [weak self] _ in
-            self?.pointerMoved()
+        let events: NSEvent.EventTypeMask = [.mouseMoved, .leftMouseDown, .leftMouseDragged, .leftMouseUp]
+        // Global: events going to other apps (almost always).
+        if let global = NSEvent.addGlobalMonitorForEvents(matching: events, handler: { [weak self] event in
+            self?.handle(event)
         }) {
             monitors.append(global)
         }
-        // Local: pointer moves delivered to Brim itself, e.g. while Settings is open.
-        if let local = NSEvent.addLocalMonitorForEvents(matching: .mouseMoved, handler: { [weak self] event in
-            self?.pointerMoved()
+        // Local: events going to Brim itself, e.g. dragging a file out of the tray.
+        if let local = NSEvent.addLocalMonitorForEvents(matching: events, handler: { [weak self] event in
+            self?.handle(event)
             return event
         }) {
             monitors.append(local)
+        }
+    }
+
+    private func handle(_ event: NSEvent) {
+        switch event.type {
+        case .leftMouseDown:
+            dragChangeCount = NSPasteboard(name: .drag).changeCount
+        case .leftMouseDragged:
+            pointerDragged()
+        default:
+            pointerMoved()
         }
     }
 
@@ -102,12 +121,30 @@ final class NotchWindowController: NSObject {
         if model.isOpen {
             if islandRect(for: model, on: screen).insetBy(dx: -8, dy: -8).contains(point) {
                 cancelClose()
-            } else {
+            } else if NSEvent.pressedMouseButtons & 1 == 0 {
+                // Stay open while the button is held: a file may be on its way out of the tray.
                 scheduleClose()
             }
         } else if hoverZone(for: model, on: screen).contains(point) {
             open()
         }
+    }
+
+    /// Opens the island when a file drag reaches the notch, so it can be dropped in the tray.
+    private func pointerDragged() {
+        guard let model, let screen else { return }
+        if model.isOpen {
+            cancelClose()
+        } else if isDraggingFiles,
+                  hoverZone(for: model, on: screen).insetBy(dx: -24, dy: -12).contains(NSEvent.mouseLocation) {
+            open()
+        }
+    }
+
+    private var isDraggingFiles: Bool {
+        let pasteboard = NSPasteboard(name: .drag)
+        return pasteboard.changeCount != dragChangeCount
+            && pasteboard.types?.contains(.fileURL) == true
     }
 
     /// Where the pointer opens the island: the closed island (wings included), widened a little so it is easy to hit.

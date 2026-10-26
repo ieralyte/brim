@@ -16,21 +16,67 @@ struct NotchView: View {
                 .shadow(color: .black.opacity(model.isOpen ? 0.45 : 0), radius: 14, y: 6)
 
             if model.isOpen {
-                NowPlayingExpandedView(service: model.nowPlaying)
+                ExpandedIslandView(model: model)
                     .padding(.top, model.closedSize.height + 8)
                     .padding(.horizontal, ear + 22)
                     .padding(.bottom, 18)
                     .frame(width: size.width + ear * 2, height: size.height)
+                    .overlay(alignment: .topTrailing) {
+                        if let snapshot = model.battery.snapshot {
+                            BatteryIndicator(snapshot: snapshot)
+                                .frame(height: model.closedSize.height)
+                                .padding(.trailing, ear + 24)
+                        }
+                    }
                     .transition(.opacity.combined(with: .scale(scale: 0.95, anchor: .top)))
-            } else if model.showsLiveActivity {
-                CompactNowPlayingView(service: model.nowPlaying,
-                                      wingWidth: model.wingWidth,
-                                      height: size.height)
-                    .frame(width: size.width)
-                    .transition(.opacity)
+            } else if let activity = model.liveActivity {
+                Group {
+                    switch activity {
+                    case .battery(let alert):
+                        BatteryAlertView(alert: alert, wingWidth: model.wingWidth, height: size.height)
+                    case .nowPlaying:
+                        CompactNowPlayingView(service: model.nowPlaying,
+                                              wingWidth: model.wingWidth,
+                                              height: size.height)
+                    }
+                }
+                .frame(width: size.width)
+                .transition(.opacity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: model.showsLiveActivity)
+        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: model.liveActivity)
+    }
+}
+
+/// The open island: Now Playing on the left, the file tray on the right.
+/// The whole island accepts dropped files.
+private struct ExpandedIslandView: View {
+    let model: NotchViewModel
+    @State private var isDropTargeted = false
+
+    var body: some View {
+        HStack(spacing: 16) {
+            NowPlayingExpandedView(service: model.nowPlaying)
+                .frame(maxWidth: .infinity)
+            Rectangle()
+                .fill(.white.opacity(0.1))
+                .frame(width: 1)
+            FileTrayView(tray: model.tray)
+                .frame(width: 168)
+        }
+        .contentShape(Rectangle())
+        .overlay {
+            if isDropTargeted {
+                TrayDropOverlay()
+                    .transition(.opacity)
+            }
+        }
+        .dropDestination(for: URL.self) { urls, _ in
+            model.tray.add(urls)
+            return !urls.isEmpty
+        } isTargeted: { targeted in
+            withAnimation(.easeOut(duration: 0.15)) { isDropTargeted = targeted }
+        }
     }
 }

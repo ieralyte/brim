@@ -14,10 +14,10 @@ Each milestone ends with a tagged GitHub release. The riskiest work (private App
 - [x] Play/pause, next, previous and a scrubber
 - [x] Compact live state while collapsed
 
-## v0.3 — File tray and battery
-- [ ] Drag files onto the notch to hold them; drag them back out
-- [ ] Tray survives restarts
-- [ ] Charging animation, low-battery alerts at 20% and 10%
+## v0.3 — File tray and battery ✅
+- [x] Drag files onto the notch to hold them; drag them back out
+- [x] Tray survives restarts
+- [x] Charging animation, low-battery alerts at 20% and 10%
 
 ## v0.4 — Lock screen
 - [ ] Now Playing and battery on the lock screen (SkyLight)

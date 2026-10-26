@@ -2,7 +2,14 @@
 
 A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a live strip for media, files and battery status, and puts Now Playing on your lock screen.
 
-> **Status: v0.2, early development.** Hover the notch to open it. While music plays, the closed island shows the artwork and a live waveform; open it for track details, a scrubber and playback controls. See [the roadmap](docs/ROADMAP.md).
+> **Status: v0.3, early development.** See [the roadmap](docs/ROADMAP.md).
+
+## Features
+
+- **Hover to open.** The notch expands into an island and closes as soon as the pointer leaves.
+- **Now Playing.** Artwork, title, artist, a scrubber and controls for Apple Music, Spotify, Tidal and browser players. While music plays, the closed island shows the artwork and a live waveform.
+- **File tray.** Drag files onto the notch to hold them, then drag them out wherever you need them. Double-click to open; the tray survives restarts.
+- **Battery.** A brief charging notice when you plug in, low-battery alerts at 20% and 10%, and the battery level in the open island.
 
 ## Requirements
 
@@ -39,13 +46,15 @@ Brim/
   App/                  Entry point, app delegate, Settings window
   Notch/                The notch panel, its shape, hover logic and state
   Features/NowPlaying/  Now Playing service and views
+  Features/FileTray/    File tray service and views
+  Features/Battery/     Battery service, alerts and indicator
   Platform/Private/     The only place private Apple APIs are allowed
   Resources/            Bundled resources (the media adapter's Perl loader)
 Vendor/
   MediaRemoteAdapter/   Third-party adapter source, built as an embedded framework
 ```
 
-Later milestones add `Features/FileTray`, `Features/Battery` and `LockScreen/`.
+Later milestones add `LockScreen/`.
 
 ## How it works
 
@@ -53,6 +62,9 @@ Later milestones add `Features/FileTray`, `Features/Battery` and `LockScreen/`.
 - Global `NSEvent` mouse-move monitors detect when the pointer reaches the notch; no Accessibility permission is needed.
 - The island is a SwiftUI view whose size and corner radii animate with a spring.
 - While closed, the panel ignores the mouse, so clicks pass straight through to the menu bar.
+- When a file drag reaches the notch, Brim notices it on the drag pasteboard and opens the island as a drop target.
+- The tray stores bookmarks, not copies, so files can move or be renamed and still resolve.
+- Battery updates come from IOKit power-source notifications; nothing polls.
 - **Now Playing** comes from Apple's private MediaRemote framework. Since macOS 15.4 it only answers Apple-signed processes, so Brim uses [mediaremote-adapter](https://github.com/ungive/mediaremote-adapter): a small framework loaded by the system's `/usr/bin/perl`, which streams updates back as JSON. It works with Apple Music, Spotify, Tidal and browser players. If a macOS update breaks it, Settings shows Now Playing as unavailable and the rest of Brim keeps working.
 
 ## Contributing
