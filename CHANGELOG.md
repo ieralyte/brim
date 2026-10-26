@@ -2,6 +2,11 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [Unreleased]
+
+### Added
+- App icon: BRIM in a live-activity pill on graphite, with a simplified "b" mark at the smallest sizes. Sources in `design/`.
+
 ## [0.5.0] - 2026-10-27
 
 ### Added

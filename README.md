@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/icon.png" width="128" height="128" alt="Brim app icon"></p>
+
 # Brim
 
 A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a live strip for media, files and battery status, and puts Now Playing on your lock screen.
@@ -105,6 +107,8 @@ Issues and pull requests are welcome. Please keep private-API code inside `Platf
 ## Acknowledgements
 
 Inspired by [Canopy](https://getcanopy.pro/). Brim is an independent project, not affiliated with Canopy, and shares none of its code or assets.
+
+The app icon's lettering is set in [Outfit](https://github.com/Outfitio/Outfit-Fonts) (SIL Open Font License, see [`design/OFL-Outfit.txt`](design/OFL-Outfit.txt)); the icon sources are in [`design/`](design).
 
 Brim bundles [mediaremote-adapter](https://github.com/ungive/mediaremote-adapter) by Jonas van den Berg and contributors (BSD 3-Clause, see [`Vendor/MediaRemoteAdapter/LICENSE`](Vendor/MediaRemoteAdapter/LICENSE)), vendored from commit `0e82bf1`. The lock screen technique is adapted from [SkyLightWindow](https://github.com/Lakr233/SkyLightWindow) by Lakr Aream (MIT License).
 
