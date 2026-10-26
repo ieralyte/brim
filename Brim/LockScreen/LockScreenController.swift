@@ -61,7 +61,7 @@ final class LockScreenController {
     private static let keepAwakeKey = "lockScreen.keepAwake"
     private static let pluggedInKey = "lockScreen.keepAwakeOnlyWhenPluggedIn"
     /// Size of the window holding the card. Transparent areas pass clicks through.
-    private static let windowSize = CGSize(width: 440, height: 150)
+    private static let windowSize = CGSize(width: 440, height: 190)
 
     @ObservationIgnored private let nowPlaying: NowPlayingService
     @ObservationIgnored private let battery: BatteryService

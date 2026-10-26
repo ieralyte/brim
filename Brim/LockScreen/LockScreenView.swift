@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The lock screen card: Now Playing with controls when music is playing, plus battery level.
+/// The lock screen card: Now Playing with a progress bar and controls, plus battery level.
 /// Falls back to a small battery pill when nothing is playing.
 struct LockScreenView: View {
     let nowPlaying: NowPlayingService
@@ -10,9 +10,9 @@ struct LockScreenView: View {
         VStack {
             if let info = nowPlaying.info {
                 HStack(spacing: 14) {
-                    ArtworkView(image: nowPlaying.artwork, size: 64, cornerRadius: 12)
+                    ArtworkView(image: nowPlaying.artwork, size: 84, cornerRadius: 14)
 
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 6) {
                         HStack(alignment: .firstTextBaseline) {
                             VStack(alignment: .leading, spacing: 1) {
                                 Text(info.title)
@@ -26,6 +26,11 @@ struct LockScreenView: View {
                             if let snapshot = battery.snapshot {
                                 BatteryIndicator(snapshot: snapshot)
                             }
+                        }
+
+                        // Same scrubber as the open island: drag it to seek, even while locked.
+                        if info.duration > 0 {
+                            ScrubberView(info: info) { nowPlaying.seek(to: $0) }
                         }
 
                         HStack(spacing: 28) {
