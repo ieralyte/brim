@@ -24,10 +24,10 @@ Each milestone ends with a tagged GitHub release. The riskiest work (private App
 - [x] Hidden immediately on unlock
 - [x] Off switch in Settings; graceful fallback if private APIs fail
 
-## v0.5 — Release pipeline
-- [ ] GitHub Actions builds an ad-hoc signed DMG on each `v*` tag
-- [ ] Homebrew tap (`homebrew-brim`) updated automatically
-- [ ] Install guide for the Gatekeeper prompt
+## v0.5 — Release pipeline ✅
+- [x] GitHub Actions builds an ad-hoc signed DMG on each `v*` tag
+- [x] Homebrew tap (`homebrew-brim`) updated automatically
+- [x] Install guide for the Gatekeeper prompt
 
 ## v1.0 — Public launch
 - [ ] Every box above ticked

@@ -2,7 +2,7 @@
 
 A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a live strip for media, files and battery status, and puts Now Playing on your lock screen.
 
-> **Status: v0.4, early development.** See [the roadmap](docs/ROADMAP.md).
+> **Status: v0.5, early development.** See [the roadmap](docs/ROADMAP.md).
 
 ## Features
 
@@ -36,9 +36,39 @@ From the command line:
 xcodebuild -project Brim.xcodeproj -scheme Brim -configuration Release build
 ```
 
-## Installing a release
+## Install
 
-Prebuilt releases are planned for v0.5 (a DMG on GitHub Releases and a Homebrew tap). They will be unsigned, so macOS blocks the first launch once. To allow it, open **System Settings → Privacy & Security** and click **Open Anyway**.
+**Homebrew**
+
+```sh
+brew install --cask ieralyte/brim/brim
+```
+
+**Download**
+
+Get `Brim-<version>.dmg` from [Releases](https://github.com/ieralyte/brim/releases), open it and drag Brim to Applications.
+
+**First launch**
+
+Brim is free and isn't notarized by Apple, so macOS blocks it the first time:
+
+1. Open Brim. macOS says it can't verify the developer; click **Done**.
+2. Open **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to Brim.
+3. Open Brim again and confirm. You only do this once per version.
+
+Brim has no Dock icon: look for it in the menu bar, then hover over the notch.
+
+## Releasing
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`) whenever a version tag is pushed:
+
+1. Bump `MARKETING_VERSION` in the project and add a section for it to `CHANGELOG.md`.
+2. Commit, then tag and push: `git tag -a v0.5.0 -m "Brim 0.5.0" && git push --follow-tags`.
+3. The workflow builds and ad-hoc signs Brim, packages a DMG, publishes a GitHub Release with the changelog notes, and updates the cask in [homebrew-brim](https://github.com/ieralyte/homebrew-brim).
+
+To build the same DMG locally, run `scripts/make-dmg.sh`; it lands in `dist/`.
+
+The tap update needs a `TAP_TOKEN` repository secret: a fine-grained personal access token with **Contents: read and write** on `homebrew-brim`. Without it, releases still publish and the tap step is skipped.
 
 ## Project layout
 

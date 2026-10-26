@@ -2,6 +2,14 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [0.5.0] - 2026-10-27
+
+### Added
+- Release workflow: pushing a version tag builds Brim on GitHub Actions, packages a DMG and publishes a GitHub Release with these notes.
+- Homebrew tap (`ieralyte/homebrew-brim`), updated automatically on each release.
+- `scripts/make-dmg.sh` builds the same DMG locally.
+- Install and release instructions in the README.
+
 ## [0.4.0] - 2026-10-27
 
 ### Added

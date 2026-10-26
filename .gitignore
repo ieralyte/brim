@@ -18,3 +18,6 @@ xcuserdata/
 *.dSYM
 *.dSYM.zip
 build.log
+
+# Release builds
+dist/

@@ -1,0 +1,76 @@
+name: Release
+
+# Push a version tag (git tag -a v0.5.0 -m "..." && git push --follow-tags)
+# to build Brim, publish a GitHub Release with the DMG, and update the Homebrew tap.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to (re)build, e.g. v0.5.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
+      TAP_REPO: ${{ github.repository_owner }}/homebrew-brim
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Work out the version
+        run: echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - name: Build and package
+        run: scripts/make-dmg.sh "$VERSION"
+
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          cat >> notes.md <<'NOTES'
+
+          ### Installing
+          Download **Brim-${{ env.VERSION }}.dmg**, open it and drag Brim to Applications.
+          Brim isn't notarized, so the first launch is blocked once: open **System Settings → Privacy & Security** and click **Open Anyway**.
+          NOTES
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: Brim ${{ env.VERSION }}
+          body_path: notes.md
+          files: |
+            dist/Brim-${{ env.VERSION }}.dmg
+            dist/Brim-${{ env.VERSION }}.dmg.sha256
+
+      - name: Update Homebrew tap
+        if: env.TAP_TOKEN != ''
+        run: |
+          SHA="$(cat "dist/Brim-$VERSION.dmg.sha256")"
+          git clone "https://x-access-token:${TAP_TOKEN}@github.com/${TAP_REPO}.git" tap
+          cd tap
+          sed -i '' -E \
+            -e "s/^  version \".*\"/  version \"$VERSION\"/" \
+            -e "s/^  sha256 .*/  sha256 \"$SHA\"/" \
+            Casks/brim.rb
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Brim $VERSION"
+          git push
