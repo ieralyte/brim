@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 
 /// A borderless, transparent panel that floats above the menu bar on every Space,
 /// including full-screen apps, without ever activating Brim.
@@ -29,4 +30,10 @@ final class NotchPanel: NSPanel {
     // keeps the frontmost app active while this happens.
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
+}
+
+/// Hosting view that lets the first click on a control work immediately,
+/// instead of only focusing the panel.
+final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }

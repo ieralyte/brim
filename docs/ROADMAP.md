@@ -9,10 +9,10 @@ Each milestone ends with a tagged GitHub release. The riskiest work (private App
 - [x] Repositions when displays change; fallback pill without a notch
 - [x] Menu bar item, no Dock icon
 
-## v0.2 — Now Playing
-- [ ] Title, artist and artwork for Apple Music, Spotify, Tidal and browsers (via mediaremote-adapter)
-- [ ] Play/pause, next, previous and a scrubber
-- [ ] Compact live state while collapsed
+## v0.2 — Now Playing ✅
+- [x] Title, artist and artwork for Apple Music, Spotify, Tidal and browsers (via mediaremote-adapter)
+- [x] Play/pause, next, previous and a scrubber
+- [x] Compact live state while collapsed
 
 ## v0.3 — File tray and battery
 - [ ] Drag files onto the notch to hold them; drag them back out

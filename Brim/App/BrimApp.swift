@@ -12,7 +12,7 @@ struct BrimApp: App {
         }
 
         Settings {
-            SettingsView()
+            SettingsView(nowPlaying: appDelegate.nowPlaying)
         }
     }
 }

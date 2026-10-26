@@ -2,7 +2,7 @@
 
 A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a live strip for media, files and battery status, and puts Now Playing on your lock screen.
 
-> **Status: v0.1, early development.** The notch shell works: hover the notch and it expands. Features arrive milestone by milestone; see [the roadmap](docs/ROADMAP.md).
+> **Status: v0.2, early development.** Hover the notch to open it. While music plays, the closed island shows the artwork and a live waveform; open it for track details, a scrubber and playback controls. See [the roadmap](docs/ROADMAP.md).
 
 ## Requirements
 
@@ -36,11 +36,16 @@ Prebuilt releases are planned for v0.5 (a DMG on GitHub Releases and a Homebrew 
 
 ```
 Brim/
-  App/      Entry point, app delegate, Settings window
-  Notch/    The notch panel, its shape, hover logic and state
+  App/                  Entry point, app delegate, Settings window
+  Notch/                The notch panel, its shape, hover logic and state
+  Features/NowPlaying/  Now Playing service and views
+  Platform/Private/     The only place private Apple APIs are allowed
+  Resources/            Bundled resources (the media adapter's Perl loader)
+Vendor/
+  MediaRemoteAdapter/   Third-party adapter source, built as an embedded framework
 ```
 
-Later milestones add `Features/` (Now Playing, File Tray, Battery), `LockScreen/`, and `Platform/Private/` (the only place private Apple APIs are allowed).
+Later milestones add `Features/FileTray`, `Features/Battery` and `LockScreen/`.
 
 ## How it works
 
@@ -48,6 +53,7 @@ Later milestones add `Features/` (Now Playing, File Tray, Battery), `LockScreen/
 - Global `NSEvent` mouse-move monitors detect when the pointer reaches the notch; no Accessibility permission is needed.
 - The island is a SwiftUI view whose size and corner radii animate with a spring.
 - While closed, the panel ignores the mouse, so clicks pass straight through to the menu bar.
+- **Now Playing** comes from Apple's private MediaRemote framework. Since macOS 15.4 it only answers Apple-signed processes, so Brim uses [mediaremote-adapter](https://github.com/ungive/mediaremote-adapter): a small framework loaded by the system's `/usr/bin/perl`, which streams updates back as JSON. It works with Apple Music, Spotify, Tidal and browser players. If a macOS update breaks it, Settings shows Now Playing as unavailable and the rest of Brim keeps working.
 
 ## Contributing
 
@@ -57,6 +63,8 @@ Issues and pull requests are welcome. Please keep private-API code inside `Platf
 
 Inspired by [Canopy](https://getcanopy.pro/). Brim is an independent project, not affiliated with Canopy, and shares none of its code or assets.
 
+Brim bundles [mediaremote-adapter](https://github.com/ungive/mediaremote-adapter) by Jonas van den Berg and contributors (BSD 3-Clause, see [`Vendor/MediaRemoteAdapter/LICENSE`](Vendor/MediaRemoteAdapter/LICENSE)), vendored from commit `0e82bf1`.
+
 ## Licence
 
-[MIT](LICENSE) © 2026 Tan Wei Jian
+[MIT](LICENSE) © 2026 Tan Wei Jian. Third-party code keeps its own licence (see Acknowledgements).

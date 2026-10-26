@@ -1,20 +1,31 @@
 import SwiftUI
 
-/// Placeholder settings window. Each milestone adds its own section here.
+/// Settings window. Each milestone adds its own section here.
 struct SettingsView: View {
+    let nowPlaying: NowPlayingService
+
     private var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+    }
+
+    private var nowPlayingStatus: String {
+        switch nowPlaying.status {
+        case .starting: "Starting…"
+        case .running: "Working"
+        case .unavailable: "Unavailable on this macOS version"
+        }
     }
 
     var body: some View {
         Form {
             Section {
                 LabeledContent("Version", value: version)
-                Text("More settings arrive with each milestone.")
-                    .foregroundStyle(.secondary)
+            }
+            Section("Diagnostics") {
+                LabeledContent("Now Playing", value: nowPlayingStatus)
             }
         }
         .formStyle(.grouped)
-        .frame(width: 420, height: 180)
+        .frame(width: 420, height: 220)
     }
 }

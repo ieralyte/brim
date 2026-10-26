@@ -6,8 +6,37 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B1C0DE00000000000000001E /* MediaRemoteAdapter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B1C0DE000000000000000012 /* MediaRemoteAdapter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B1C0DE00000000000000001C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B1C0DE000000000000000009 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1C0DE000000000000000013;
+			remoteInfo = MediaRemoteAdapter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B1C0DE00000000000000001D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B1C0DE00000000000000001E /* MediaRemoteAdapter.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B1C0DE000000000000000001 /* Brim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brim.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1C0DE000000000000000012 /* MediaRemoteAdapter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MediaRemoteAdapter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +45,23 @@
 			path = Brim;
 			sourceTree = "<group>";
 		};
+		B1C0DE000000000000000011 /* MediaRemoteAdapter */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = MediaRemoteAdapter;
+			path = Vendor/MediaRemoteAdapter;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B1C0DE000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1C0DE000000000000000015 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				B1C0DE000000000000000002 /* Brim */,
+				B1C0DE000000000000000011 /* MediaRemoteAdapter */,
 				B1C0DE000000000000000005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				B1C0DE000000000000000001 /* Brim.app */,
+				B1C0DE000000000000000012 /* MediaRemoteAdapter.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +99,12 @@
 				B1C0DE000000000000000007 /* Sources */,
 				B1C0DE000000000000000003 /* Frameworks */,
 				B1C0DE000000000000000008 /* Resources */,
+				B1C0DE00000000000000001D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B1C0DE00000000000000001B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				B1C0DE000000000000000002 /* Brim */,
@@ -69,6 +115,28 @@
 			productName = Brim;
 			productReference = B1C0DE000000000000000001 /* Brim.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B1C0DE000000000000000013 /* MediaRemoteAdapter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1C0DE000000000000000018 /* Build configuration list for PBXNativeTarget "MediaRemoteAdapter" */;
+			buildPhases = (
+				B1C0DE000000000000000014 /* Sources */,
+				B1C0DE000000000000000015 /* Frameworks */,
+				B1C0DE000000000000000016 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B1C0DE000000000000000011 /* MediaRemoteAdapter */,
+			);
+			name = MediaRemoteAdapter;
+			packageProductDependencies = (
+			);
+			productName = MediaRemoteAdapter;
+			productReference = B1C0DE000000000000000012 /* MediaRemoteAdapter.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +149,9 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					B1C0DE000000000000000006 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					B1C0DE000000000000000013 = {
 						CreatedOnToolsVersion = 26.0;
 					};
 				};
@@ -100,12 +171,20 @@
 			projectRoot = "";
 			targets = (
 				B1C0DE000000000000000006 /* Brim */,
+				B1C0DE000000000000000013 /* MediaRemoteAdapter */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B1C0DE000000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1C0DE000000000000000016 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +201,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B1C0DE000000000000000014 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B1C0DE00000000000000001B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B1C0DE000000000000000013 /* MediaRemoteAdapter */;
+			targetProxy = B1C0DE00000000000000001C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B1C0DE00000000000000000A /* Debug */ = {
@@ -201,7 +295,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.brim.Brim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -234,7 +328,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.brim.Brim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -242,6 +336,92 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B1C0DE000000000000000019 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendor/MediaRemoteAdapter/include",
+					"$(SRCROOT)/Vendor/MediaRemoteAdapter/src",
+				);
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (c) 2025 Jonas van den Berg and contributors. BSD 3-Clause License.";
+				INSTALL_PATH = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.2.0;
+				OTHER_CFLAGS = "-fvisibility=default";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+					"-framework",
+					UniformTypeIdentifiers,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.brim.MediaRemoteAdapter;
+				PRODUCT_NAME = MediaRemoteAdapter;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B1C0DE00000000000000001A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendor/MediaRemoteAdapter/include",
+					"$(SRCROOT)/Vendor/MediaRemoteAdapter/src",
+				);
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (c) 2025 Jonas van den Berg and contributors. BSD 3-Clause License.";
+				INSTALL_PATH = "@rpath";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.2.0;
+				OTHER_CFLAGS = "-fvisibility=default";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+					"-framework",
+					UniformTypeIdentifiers,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.brim.MediaRemoteAdapter;
+				PRODUCT_NAME = MediaRemoteAdapter;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -262,6 +442,15 @@
 			buildConfigurations = (
 				B1C0DE00000000000000000D /* Debug */,
 				B1C0DE00000000000000000E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B1C0DE000000000000000018 /* Build configuration list for PBXNativeTarget "MediaRemoteAdapter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1C0DE000000000000000019 /* Debug */,
+				B1C0DE00000000000000001A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
