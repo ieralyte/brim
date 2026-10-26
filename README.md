@@ -12,7 +12,7 @@ A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a liv
 - **Now Playing.** Artwork, title, artist, a scrubber and controls for Apple Music, Spotify, Tidal and browser players. While music plays, the closed island shows the artwork and a live waveform.
 - **File tray.** Drag files onto the notch to hold them, then drag them out wherever you need them. Double-click to open; the tray survives restarts.
 - **Battery.** A brief charging notice when you plug in, low-battery alerts at 20% and 10%, and the battery level in the open island.
-- **Lock screen.** Now Playing with controls, and your battery level, before you log in. Turn it off in Settings.
+- **Lock screen.** Now Playing with controls, and your battery level, before you log in. Brim can keep the lock screen lit while music plays (or always), instead of macOS turning it off after about 30 seconds. Both are in Settings.
 
 ## Requirements
 

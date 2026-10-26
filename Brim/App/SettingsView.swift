@@ -40,8 +40,15 @@ struct SettingsView: View {
             Section {
                 Toggle("Show on lock screen", isOn: $lockScreen.isEnabled)
                     .disabled(lockScreen.status == .unavailable)
+                Picker("Keep the screen on while locked", selection: $lockScreen.keepAwake) {
+                    ForEach(LockScreenController.KeepAwake.allCases) { option in
+                        Text(option.label).tag(option)
+                    }
+                }
+                Toggle("Only when plugged in", isOn: $lockScreen.keepAwakeOnlyWhenPluggedIn)
+                    .disabled(lockScreen.keepAwake == .never)
             } footer: {
-                Text("Now Playing controls and battery level, before you log in.")
+                Text("Now Playing controls and battery level, before you log in. macOS turns the lock screen off after about 30 seconds unless Brim keeps it on.")
                     .foregroundStyle(.secondary)
             }
             Section("Diagnostics") {
@@ -57,6 +64,6 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 440, height: 400)
+        .frame(width: 460, height: 480)
     }
 }

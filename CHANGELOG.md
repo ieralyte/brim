@@ -2,6 +2,11 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [Unreleased]
+
+### Added
+- Settings → "Keep the screen on while locked": Never, While music is playing (default) or Always, optionally only when plugged in. macOS otherwise turns the lock screen off after about 30 seconds.
+
 ## [0.5.1] - 2026-10-27
 
 ### Added
