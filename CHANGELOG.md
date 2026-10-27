@@ -2,7 +2,7 @@
 
 All notable changes to Brim are listed here, newest first.
 
-## [Unreleased]
+## [0.5.3] - 2026-10-28
 
 ### Added
 - Settings → "Start Brim at login", using macOS's login item service. If macOS asks for approval, Settings links straight to Login Items.
