@@ -29,10 +29,12 @@ Each milestone ends with a tagged GitHub release. The riskiest work (private App
 - [x] Homebrew tap (`homebrew-brim`) updated automatically
 - [x] Install guide for the Gatekeeper prompt
 
-## v1.0 — Public launch
-- [ ] Every box above ticked
-- [ ] Diagnostics panel in Settings
-- [ ] README demo GIF
+## v1.0 — Public launch ✅
+- [x] Every box above ticked
+- [x] Diagnostics panel in Settings
+- [x] README demo GIF
+- [x] Launch at login, floating pill on displays without a notch
+- [x] Public repo and Homebrew tap
 
 ## v1.1 — Live lyrics
 - [ ] Time-synced lyrics from LRCLIB in the notch and on the lock screen (opt-in)

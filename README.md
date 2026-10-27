@@ -4,7 +4,7 @@
 
 A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a live strip for media, files and battery status, and puts Now Playing on your lock screen.
 
-> **Status: v0.5, early development.** See [the roadmap](docs/ROADMAP.md) and [changelog](CHANGELOG.md).
+> **Status: v1.0.** See [the roadmap](docs/ROADMAP.md) and [changelog](CHANGELOG.md).
 
 <p align="center">
   <img src="docs/images/demo.gif" width="606" alt="Hovering the top of the screen opens Brim's island, showing the song that is playing with a progress bar, playback controls and the file tray">

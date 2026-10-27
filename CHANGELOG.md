@@ -2,7 +2,9 @@
 
 All notable changes to Brim are listed here, newest first.
 
-## [Unreleased]
+## [1.0.0] - 2026-10-28
+
+The first public release: Brim is open source on GitHub and installs with `brew install --cask ieralyte/brim/brim`.
 
 ### Added
 - Third-party notices (mediaremote-adapter, SkyLightWindow, Outfit), in the repo and inside the app.
