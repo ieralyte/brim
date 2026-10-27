@@ -33,6 +33,11 @@ A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a liv
   <em>Plugging in shows a brief charging notice. (These two are on an external display; on a MacBook they sit either side of the notch.)</em>
 </p>
 
+<p align="center">
+  <img src="docs/images/lock-screen.jpg" width="550" alt="The macOS lock screen showing the time, with a frosted card below it: album art, song title and artist, a progress bar, playback controls and the battery level"><br>
+  <em>On the lock screen: Now Playing with a progress bar and controls, before you log in.</em>
+</p>
+
 ## Requirements
 
 - macOS 26 Tahoe or later
