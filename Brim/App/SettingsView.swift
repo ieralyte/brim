@@ -5,6 +5,7 @@ struct SettingsView: View {
     let nowPlaying: NowPlayingService
     let battery: BatteryService
     @Bindable var lockScreen: LockScreenController
+    @Bindable var lyrics: LyricsService
     let launchAtLogin: LaunchAtLogin
 
     private var version: String {
@@ -25,6 +26,25 @@ struct SettingsView: View {
         case .off: "Off"
         case .unavailable: "Unavailable" + (lockScreen.unavailableReason.map { " (\($0))" } ?? "")
         }
+    }
+
+    private var lyricsStatus: String {
+        switch lyrics.state {
+        case .off: "Off"
+        case .waiting: "Waiting for a song"
+        case .loading: "Looking…"
+        case .synced: "Showing synced lyrics"
+        case .unsynced: "Showing lyrics without timings"
+        case .instrumental: "Instrumental"
+        case .notFound: "None found for this song"
+        case .failed: "Couldn't reach LRCLIB"
+        }
+    }
+
+    private var leadLabel: String {
+        let value = (lyrics.lead * 10).rounded() / 10
+        if value == 0 { return "On time" }
+        return String(format: "%.1f s ", abs(value)) + (value > 0 ? "earlier" : "later")
     }
 
     private var batteryStatus: String {
@@ -68,10 +88,31 @@ struct SettingsView: View {
                 Text("Now Playing controls and battery level, before you log in. macOS turns the lock screen off after about 30 seconds unless Brim keeps it on.")
                     .foregroundStyle(.secondary)
             }
+            Section {
+                Toggle("Show lyrics", isOn: $lyrics.isEnabled)
+                LabeledContent {
+                    HStack {
+                        Slider(value: $lyrics.lead, in: LyricsService.leadRange, step: 0.1)
+                            .frame(width: 140)
+                        Text(leadLabel)
+                            .monospacedDigit()
+                            .frame(width: 84, alignment: .trailing)
+                            .foregroundStyle(.secondary)
+                    }
+                } label: {
+                    Text("Timing")
+                    Text("Slide right if lines appear late")
+                }
+                .disabled(!lyrics.isEnabled)
+            } footer: {
+                Text("Time-synced lyrics in the island and on the lock screen, from LRCLIB (lrclib.net). When on, Brim sends the title, artist, album and length of the song that's playing.")
+                    .foregroundStyle(.secondary)
+            }
             Section("Diagnostics") {
                 LabeledContent("Now Playing", value: nowPlayingStatus)
                 LabeledContent("Battery", value: batteryStatus)
                 LabeledContent("Lock screen", value: lockScreenStatus)
+                LabeledContent("Lyrics", value: lyricsStatus)
                 LabeledContent("Preview alerts") {
                     HStack {
                         Button("Charging") { battery.preview(.charging) }
@@ -81,7 +122,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 460, height: 520)
+        .frame(width: 460, height: 600)
         .onAppear { launchAtLogin.refresh() }
     }
 }

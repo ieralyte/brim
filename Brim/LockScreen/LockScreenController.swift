@@ -64,17 +64,19 @@ final class LockScreenController {
     private static let keepAwakeKey = "lockScreen.keepAwake"
     private static let pluggedInKey = "lockScreen.keepAwakeOnlyWhenPluggedIn"
     /// Size of the window holding the card. Transparent areas pass clicks through.
-    private static let windowSize = CGSize(width: 440, height: 190)
+    private static let windowSize = CGSize(width: 440, height: 280)
 
     @ObservationIgnored private let nowPlaying: NowPlayingService
     @ObservationIgnored private let battery: BatteryService
+    @ObservationIgnored private let lyrics: LyricsService
     private var skyLight: SkyLightSpace? = nil
     @ObservationIgnored private var window: NSWindow?
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private let displayWake = DisplayWakeAssertion()
     @ObservationIgnored private var isLocked = false
 
-    init(nowPlaying: NowPlayingService, battery: BatteryService) {
+    init(nowPlaying: NowPlayingService, battery: BatteryService, lyrics: LyricsService) {
+        self.lyrics = lyrics
         self.nowPlaying = nowPlaying
         self.battery = battery
         let defaults = UserDefaults.standard
@@ -199,7 +201,7 @@ final class LockScreenController {
         let window = LockScreenWindow(contentRect: NSRect(origin: .zero, size: Self.windowSize),
                                       styleMask: [.borderless, .fullSizeContentView],
                                       backing: .buffered, defer: false)
-        let hosting = FirstMouseHostingView(rootView: LockScreenView(nowPlaying: nowPlaying, battery: battery))
+        let hosting = FirstMouseHostingView(rootView: LockScreenView(nowPlaying: nowPlaying, battery: battery, lyrics: lyrics))
         hosting.sizingOptions = []
         window.contentView = hosting
         return window

@@ -17,6 +17,7 @@ A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a liv
 - **File tray.** Drag files onto the notch to hold them, then drag them out wherever you need them. Double-click to open; the tray survives restarts.
 - **Battery.** A brief charging notice when you plug in, low-battery alerts at 20% and 10%, and the battery level in the open island.
 - **Lock screen.** Now Playing with controls, a song progress bar and your battery level, before you log in. Brim can keep the lock screen lit while music plays (or always), instead of macOS turning it off after about 30 seconds.
+- **Live lyrics** (optional). Time-synced lyrics from [LRCLIB](https://lrclib.net) in a **Lyrics** tab beside the tray, highlighted line by line as the song plays, and on the lock screen. Off until you turn it on.
 
 <p align="center">
   <img src="docs/images/island.png" width="597" alt="The open island: album art, song title and artist, a progress bar with elapsed and remaining time, playback controls, the file tray and the battery level"><br>
@@ -89,6 +90,7 @@ Brim has **no Dock icon and no window** when it starts. That's normal.
 - **Hover over the notch** to open the island. Move the pointer away to close it.
 - **Settings and Quit** are in the menu bar icon (a small rectangle with a filled top). On a busy menu bar, macOS can hide icons behind the notch; quit a few other menu bar apps if you can't see it, or hold **⌘** and drag other icons out of the way.
 - **Lock screen** options (show on lock screen, keep the screen on while locked) are in Settings. **Settings → Diagnostics** shows whether Now Playing and the lock screen are working on your Mac.
+- **Lyrics:** turn on **Show lyrics** in Settings, then switch between **Tray** and **Lyrics** at the top of the island's right-hand column. Click a line to jump to it. When lyrics are on, Brim sends the title, artist, album and length of the song that's playing to LRCLIB, and nothing else.
 - **Start at login:** turn on **Start Brim at login** in Brim's Settings. It then appears under **System Settings → General → Login Items & Extensions**, where you can also turn it off.
 
 ## Update
@@ -153,6 +155,7 @@ Brim/
   Features/NowPlaying/  Now Playing service and views
   Features/FileTray/    File tray service and views
   Features/Battery/     Battery service, alerts and indicator
+  Features/Lyrics/      LRCLIB client, LRC parser, lyrics service and views
   LockScreen/           Lock screen card and the window that holds it
   Platform/             Display wake assertion
   Platform/Private/     The only place private Apple APIs are allowed
@@ -171,6 +174,7 @@ scripts/make-dmg.sh     Builds, ad-hoc signs and packages a DMG
 - When a file drag reaches the notch, Brim notices it on the drag pasteboard and opens the island as a drop target.
 - The tray stores bookmarks, not copies, so files can move or be renamed and still resolve.
 - Battery updates come from IOKit power-source notifications; nothing polls.
+- **Lyrics** come from [LRCLIB](https://lrclib.net)'s public API, looked up once per song and cached for the session. Brim works out the current line from the playback position and sleeps until the next line is due, rather than polling; pausing, seeking or skipping resets the timer.
 - **Lock screen** uses Apple's private SkyLight window server API, following [SkyLightWindow](https://github.com/Lakr233/SkyLightWindow): Brim creates a window-server space at the level macOS uses for lock screen notifications and moves its card into it when the screen locks. Every private call is looked up at runtime, so if macOS removes one, the feature switches off and Settings says so.
 - **Now Playing** comes from Apple's private MediaRemote framework. Since macOS 15.4 it only answers Apple-signed processes, so Brim uses [mediaremote-adapter](https://github.com/ungive/mediaremote-adapter): a small framework loaded by the system's `/usr/bin/perl`, which streams updates back as JSON. It works with Apple Music, Spotify, Tidal and browser players. If a macOS update breaks it, Settings shows Now Playing as unavailable and the rest of Brim keeps working.
 
@@ -195,6 +199,8 @@ Inspired by [Canopy](https://getcanopy.pro/). Brim is an independent project, no
 The app icon's lettering is set in [Outfit](https://github.com/Outfitio/Outfit-Fonts) (SIL Open Font License, see [`design/OFL-Outfit.txt`](design/OFL-Outfit.txt)); the icon sources are in [`design/`](design).
 
 Brim bundles [mediaremote-adapter](https://github.com/ungive/mediaremote-adapter) by Jonas van den Berg and contributors (BSD 3-Clause, see [`Vendor/MediaRemoteAdapter/LICENSE`](Vendor/MediaRemoteAdapter/LICENSE)), vendored from commit `0e82bf1`. The lock screen technique is adapted from [SkyLightWindow](https://github.com/Lakr233/SkyLightWindow) by Lakr Aream (MIT License). Their licence texts are in [`Brim/Resources/THIRD_PARTY_NOTICES.md`](Brim/Resources/THIRD_PARTY_NOTICES.md), which also ships inside the app.
+
+Lyrics come from [LRCLIB](https://lrclib.net), a free, community-run lyrics database.
 
 ## Licence
 

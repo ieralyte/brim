@@ -80,7 +80,7 @@ private struct ExpandedIslandView: View {
             Rectangle()
                 .fill(.white.opacity(0.1))
                 .frame(width: 1)
-            FileTrayView(tray: model.tray)
+            SidePaneView(model: model)
                 .frame(width: 168)
         }
         .contentShape(Rectangle())
@@ -95,6 +95,7 @@ private struct ExpandedIslandView: View {
             return !urls.isEmpty
         } isTargeted: { targeted in
             withAnimation(.easeOut(duration: 0.15)) { isDropTargeted = targeted }
+            if targeted { model.sidePane = .tray } // show where the files will land
         }
     }
 }

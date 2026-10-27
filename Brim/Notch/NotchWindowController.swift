@@ -7,6 +7,7 @@ final class NotchWindowController: NSObject {
     private let nowPlaying: NowPlayingService
     private let tray: FileTrayService
     private let battery: BatteryService
+    private let lyrics: LyricsService
     private var panel: NotchPanel?
     private var model: NotchViewModel?
     private var screen: NSScreen?
@@ -21,7 +22,8 @@ final class NotchWindowController: NSObject {
     /// How long the pointer must stay away before the island closes.
     private let closeDelay: Duration = .milliseconds(60)
 
-    init(nowPlaying: NowPlayingService, tray: FileTrayService, battery: BatteryService) {
+    init(nowPlaying: NowPlayingService, tray: FileTrayService, battery: BatteryService, lyrics: LyricsService) {
+        self.lyrics = lyrics
         self.nowPlaying = nowPlaying
         self.tray = tray
         self.battery = battery
@@ -58,7 +60,7 @@ final class NotchWindowController: NSObject {
             existing.closedSize = closedSize
             model = existing
         } else {
-            model = NotchViewModel(closedSize: closedSize, nowPlaying: nowPlaying, tray: tray, battery: battery)
+            model = NotchViewModel(closedSize: closedSize, nowPlaying: nowPlaying, tray: tray, battery: battery, lyrics: lyrics)
             self.model = model
         }
         model.hasHardwareNotch = target.notchSize != nil

@@ -37,7 +37,8 @@ Each milestone ends with a tagged GitHub release. The riskiest work (private App
 - [x] Public repo and Homebrew tap
 
 ## v1.1 — Live lyrics
-- [ ] Time-synced lyrics from LRCLIB in the notch and on the lock screen (opt-in)
+- [x] Time-synced lyrics from LRCLIB in the notch and on the lock screen (opt-in)
+- [x] Tray and Lyrics tabs in the open island
 
 ## Later
 - AirPods battery, weather, calendar, audio output picker, external displays

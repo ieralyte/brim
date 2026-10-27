@@ -29,13 +29,23 @@ final class NotchViewModel {
     let nowPlaying: NowPlayingService
     let tray: FileTrayService
     let battery: BatteryService
+    let lyrics: LyricsService
+
+    /// Which tab the open island's side pane shows. Remembered between launches.
+    var sidePane: SidePane = SidePane(rawValue: UserDefaults.standard.string(forKey: SidePane.defaultsKey) ?? "") ?? .tray {
+        didSet { UserDefaults.standard.set(sidePane.rawValue, forKey: SidePane.defaultsKey) }
+    }
+
+    /// The tab actually shown: always the tray while lyrics are turned off.
+    var visibleSidePane: SidePane { lyrics.isEnabled ? sidePane : .tray }
 
     /// A charging or low-battery notice, shown for a few seconds.
     private(set) var batteryAlert: BatteryAlert?
     @ObservationIgnored private var alertTask: Task<Void, Never>?
 
-    init(closedSize: CGSize, nowPlaying: NowPlayingService, tray: FileTrayService, battery: BatteryService) {
+    init(closedSize: CGSize, nowPlaying: NowPlayingService, tray: FileTrayService, battery: BatteryService, lyrics: LyricsService) {
         self.closedSize = closedSize
+        self.lyrics = lyrics
         self.nowPlaying = nowPlaying
         self.tray = tray
         self.battery = battery

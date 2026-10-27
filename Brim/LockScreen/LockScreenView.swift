@@ -5,42 +5,58 @@ import SwiftUI
 struct LockScreenView: View {
     let nowPlaying: NowPlayingService
     let battery: BatteryService
+    let lyrics: LyricsService
 
     var body: some View {
         VStack {
             if let info = nowPlaying.info {
-                HStack(spacing: 14) {
-                    ArtworkView(image: nowPlaying.artwork, size: 84, cornerRadius: 14)
+                VStack(spacing: 14) {
+                    HStack(spacing: 14) {
+                        ArtworkView(image: nowPlaying.artwork, size: 84, cornerRadius: 14)
 
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(alignment: .firstTextBaseline) {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(info.title)
-                                    .font(.system(size: 15, weight: .semibold))
-                                Text(info.artist ?? info.album ?? " ")
-                                    .font(.system(size: 13))
-                                    .foregroundStyle(.white.opacity(0.7))
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(alignment: .firstTextBaseline) {
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(info.title)
+                                        .font(.system(size: 15, weight: .semibold))
+                                    Text(info.artist ?? info.album ?? " ")
+                                        .font(.system(size: 13))
+                                        .foregroundStyle(.white.opacity(0.7))
+                                }
+                                .lineLimit(1)
+                                Spacer(minLength: 8)
+                                if let snapshot = battery.snapshot {
+                                    BatteryIndicator(snapshot: snapshot)
+                                }
                             }
-                            .lineLimit(1)
-                            Spacer(minLength: 8)
-                            if let snapshot = battery.snapshot {
-                                BatteryIndicator(snapshot: snapshot)
-                            }
-                        }
 
-                        // Same scrubber as the open island: drag it to seek, even while locked.
-                        if info.duration > 0 {
-                            ScrubberView(info: info) { nowPlaying.seek(to: $0) }
-                        }
-
-                        HStack(spacing: 28) {
-                            LockScreenButton(symbol: "backward.fill", size: 15) { nowPlaying.previousTrack() }
-                            LockScreenButton(symbol: nowPlaying.isPlaying ? "pause.fill" : "play.fill", size: 20) {
-                                nowPlaying.togglePlayPause()
+                            // Same scrubber as the open island: drag it to seek, even while locked.
+                            if info.duration > 0 {
+                                ScrubberView(info: info) { nowPlaying.seek(to: $0) }
                             }
-                            LockScreenButton(symbol: "forward.fill", size: 15) { nowPlaying.nextTrack() }
+
+                            HStack(spacing: 28) {
+                                LockScreenButton(symbol: "backward.fill", size: 15) { nowPlaying.previousTrack() }
+                                LockScreenButton(symbol: nowPlaying.isPlaying ? "pause.fill" : "play.fill", size: 20) {
+                                    nowPlaying.togglePlayPause()
+                                }
+                                LockScreenButton(symbol: "forward.fill", size: 15) { nowPlaying.nextTrack() }
+                            }
+                            .frame(maxWidth: .infinity)
                         }
+                    }
+
+                    if lyrics.state == .synced {
+                        VStack(spacing: 4) {
+                            LyricLineView(text: lyrics.currentLine,
+                                          size: 17, weight: .semibold, lineLimit: 2)
+                            LyricLineView(text: lyrics.nextLine,
+                                          size: 13, weight: .regular, lineLimit: 1)
+                                .foregroundStyle(.white.opacity(0.55))
+                        }
+                        .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
+                        .transition(.opacity)
                     }
                 }
                 .foregroundStyle(.white)
@@ -57,6 +73,7 @@ struct LockScreenView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.top, 8)
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: nowPlaying.info == nil)
+        .animation(.easeOut(duration: 0.25), value: lyrics.state == .synced)
     }
 }
 

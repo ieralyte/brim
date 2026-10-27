@@ -2,6 +2,14 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [Unreleased]
+
+### Added
+- Live lyrics (opt-in): time-synced lyrics from [LRCLIB](https://lrclib.net). Turn on **Show lyrics** in Settings.
+  - The open island's right-hand column has **Tray** and **Lyrics** tabs. The lyrics scroll along with the song, the line being sung is highlighted, and clicking a line jumps there. Songs with only plain lyrics show them as scrollable text.
+  - The lock screen card shows the current and next line.
+  - Settings → Diagnostics shows whether lyrics were found for the current song.
+
 ## [1.0.0] - 2026-10-28
 
 The first public release: Brim is open source on GitHub and installs with `brew install --cask ieralyte/brim/brim`.

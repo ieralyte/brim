@@ -1,25 +1,12 @@
 import SwiftUI
 
-/// The tray column in the open island. Drag files out, double-click to open,
+/// The tray in the open island's side pane. Drag files out, double-click to open,
 /// hover to reveal the remove button.
 struct FileTrayView: View {
     let tray: FileTrayService
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("Tray")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.6))
-                Spacer()
-                if !tray.items.isEmpty {
-                    Button("Clear") { tray.clear() }
-                        .buttonStyle(.plain)
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.6))
-                }
-            }
-
+        Group {
             if tray.items.isEmpty {
                 VStack(spacing: 4) {
                     Image(systemName: "tray.and.arrow.down")
