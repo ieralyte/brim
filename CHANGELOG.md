@@ -2,7 +2,7 @@
 
 All notable changes to Brim are listed here, newest first.
 
-## [Unreleased]
+## [0.5.4] - 2026-10-28
 
 ### Changed
 - Xcode's recommended project settings (dead code stripping, standard compiler warnings).
