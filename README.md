@@ -6,6 +6,10 @@ A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a liv
 
 > **Status: v0.5, early development.** See [the roadmap](docs/ROADMAP.md) and [changelog](CHANGELOG.md).
 
+<p align="center">
+  <img src="docs/images/demo.gif" width="606" alt="Hovering the top of the screen opens Brim's island, showing the song that is playing with a progress bar, playback controls and the file tray">
+</p>
+
 ## Features
 
 - **Hover to open.** The notch expands into an island and closes as soon as the pointer leaves.
@@ -13,6 +17,21 @@ A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a liv
 - **File tray.** Drag files onto the notch to hold them, then drag them out wherever you need them. Double-click to open; the tray survives restarts.
 - **Battery.** A brief charging notice when you plug in, low-battery alerts at 20% and 10%, and the battery level in the open island.
 - **Lock screen.** Now Playing with controls, a song progress bar and your battery level, before you log in. Brim can keep the lock screen lit while music plays (or always), instead of macOS turning it off after about 30 seconds.
+
+<p align="center">
+  <img src="docs/images/island.png" width="597" alt="The open island: album art, song title and artist, a progress bar with elapsed and remaining time, playback controls, the file tray and the battery level"><br>
+  <em>The open island: Now Playing, the file tray and battery level.</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/live-activity.png" width="606" alt="A slim black pill at the top of the screen with album art on the left and a waveform on the right"><br>
+  <em>While music plays, the closed island shows the artwork and a live waveform.</em>
+</p>
+
+<p align="center">
+  <img src="docs/images/charging.png" width="606" alt="A slim black pill at the top of the screen with a green lightning bolt and 80%"><br>
+  <em>Plugging in shows a brief charging notice. (These two are on an external display; on a MacBook they sit either side of the notch.)</em>
+</p>
 
 ## Requirements
 
