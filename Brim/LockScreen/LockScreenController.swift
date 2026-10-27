@@ -57,6 +57,9 @@ final class LockScreenController {
         return isEnabled ? .ready : .off
     }
 
+    /// Why the lock screen is unavailable, for Settings → Diagnostics.
+    private(set) var unavailableReason: String? = nil
+
     private static let enabledKey = "lockScreen.enabled"
     private static let keepAwakeKey = "lockScreen.keepAwake"
     private static let pluggedInKey = "lockScreen.keepAwakeOnlyWhenPluggedIn"
@@ -65,7 +68,7 @@ final class LockScreenController {
 
     @ObservationIgnored private let nowPlaying: NowPlayingService
     @ObservationIgnored private let battery: BatteryService
-    @ObservationIgnored private let skyLight: SkyLightSpace?
+    private var skyLight: SkyLightSpace? = nil
     @ObservationIgnored private var window: NSWindow?
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private let displayWake = DisplayWakeAssertion()
@@ -74,11 +77,23 @@ final class LockScreenController {
     init(nowPlaying: NowPlayingService, battery: BatteryService) {
         self.nowPlaying = nowPlaying
         self.battery = battery
-        self.skyLight = SkyLightSpace()
         let defaults = UserDefaults.standard
         self.isEnabled = defaults.object(forKey: Self.enabledKey) as? Bool ?? true
         self.keepAwake = defaults.string(forKey: Self.keepAwakeKey).flatMap { KeepAwake(rawValue: $0) } ?? .whilePlaying
         self.keepAwakeOnlyWhenPluggedIn = defaults.object(forKey: Self.pluggedInKey) as? Bool ?? false
+        setUpSkyLight()
+    }
+
+    /// Creates the lock screen space if it doesn't exist yet. Retried on every lock,
+    /// so a failure at launch (for example while logging in) isn't permanent.
+    private func setUpSkyLight() {
+        guard skyLight == nil else { return }
+        do {
+            skyLight = try SkyLightSpace()
+            unavailableReason = nil
+        } catch {
+            unavailableReason = String(describing: error)
+        }
     }
 
     func start() {
@@ -103,6 +118,7 @@ final class LockScreenController {
 
     private func locked() {
         isLocked = true
+        setUpSkyLight()
         show()
         updateDisplayWake()
     }
@@ -164,6 +180,9 @@ final class LockScreenController {
         window.orderFrontRegardless()
         guard skyLight.add(window) else {
             window.orderOut(nil)
+            // Drop the space so the next lock builds a fresh one.
+            self.skyLight = nil
+            unavailableReason = "the lock screen space refused the window"
             return
         }
         NSAnimationContext.runAnimationGroup { context in

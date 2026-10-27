@@ -2,6 +2,15 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [Unreleased]
+
+### Changed
+- Xcode's recommended project settings (dead code stripping, standard compiler warnings).
+- README: screenshots and a demo GIF.
+
+### Fixed
+- The lock screen card could stay unavailable until Brim was restarted, for example when Brim started at login. Setup now tolerates harmless errors from macOS, retries on every lock, and Settings → Diagnostics shows the reason if it still fails.
+
 ## [0.5.3] - 2026-10-28
 
 ### Added

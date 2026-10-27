@@ -23,7 +23,7 @@ struct SettingsView: View {
         switch lockScreen.status {
         case .ready: "Working"
         case .off: "Off"
-        case .unavailable: "Unavailable on this macOS version"
+        case .unavailable: "Unavailable" + (lockScreen.unavailableReason.map { " (\($0))" } ?? "")
         }
     }
 
