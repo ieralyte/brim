@@ -19,14 +19,17 @@ jobs:
     runs-on: macos-26
     env:
       TAG: ${{ github.event.inputs.tag || github.ref_name }}
-      TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
       TAP_REPO: ${{ github.repository_owner }}/homebrew-brim
+      # Only a yes/no here: the token itself is given to the tap step alone.
+      HAS_TAP_TOKEN: ${{ secrets.TAP_TOKEN != '' }}
     steps:
-      - uses: actions/checkout@v4
+      # Third-party actions are pinned to exact commits so a moved tag can't change what runs.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ env.TAG }}
+          persist-credentials: false
 
-      - uses: maxim-lobanov/setup-xcode@v1
+      - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1.7.0
         with:
           xcode-version: latest-stable
 
@@ -51,7 +54,7 @@ jobs:
           NOTES
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           tag_name: ${{ env.TAG }}
           name: Brim ${{ env.VERSION }}
@@ -61,7 +64,9 @@ jobs:
             dist/Brim-${{ env.VERSION }}.dmg.sha256
 
       - name: Update Homebrew tap
-        if: env.TAP_TOKEN != ''
+        if: env.HAS_TAP_TOKEN == 'true'
+        env:
+          TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
         run: |
           SHA="$(cat "dist/Brim-$VERSION.dmg.sha256")"
           git clone "https://x-access-token:${TAP_TOKEN}@github.com/${TAP_REPO}.git" tap

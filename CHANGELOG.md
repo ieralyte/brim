@@ -2,6 +2,15 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [Unreleased]
+
+### Added
+- Third-party notices (mediaremote-adapter, SkyLightWindow, Outfit), in the repo and inside the app.
+- README: lock screen photo.
+
+### Security
+- Release workflow: the Homebrew token is only given to the step that updates the tap, and third-party actions are pinned to exact commits.
+
 ## [0.5.4] - 2026-10-28
 
 ### Changed
