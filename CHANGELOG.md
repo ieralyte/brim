@@ -2,7 +2,9 @@
 
 All notable changes to Brim are listed here, newest first.
 
-## [Unreleased]
+## [1.1.0] - 2026-10-28
+
+Live lyrics in the island and on the lock screen.
 
 ### Added
 - Live lyrics (opt-in): time-synced lyrics from [LRCLIB](https://lrclib.net). Turn on **Show lyrics** in Settings.
