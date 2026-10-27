@@ -13,7 +13,7 @@ struct BrimApp: App {
 
         Settings {
             SettingsView(nowPlaying: appDelegate.nowPlaying, battery: appDelegate.battery,
-                         lockScreen: appDelegate.lockScreen)
+                         lockScreen: appDelegate.lockScreen, launchAtLogin: appDelegate.launchAtLogin)
         }
     }
 }

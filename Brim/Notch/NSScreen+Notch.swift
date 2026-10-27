@@ -22,4 +22,11 @@ extension NSScreen {
     static var withNotch: NSScreen? {
         screens.first { $0.notchSize != nil }
     }
+
+    /// Where Brim lives: the notched display if there is one, otherwise the primary
+    /// display (the one set as main in System Settings → Displays, which holds the
+    /// menu bar). Not `NSScreen.main`, which follows whichever screen has focus.
+    static var brimHome: NSScreen? {
+        withNotch ?? screens.first
+    }
 }

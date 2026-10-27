@@ -2,6 +2,18 @@
 
 All notable changes to Brim are listed here, newest first.
 
+## [Unreleased]
+
+### Added
+- Settings → "Start Brim at login", using macOS's login item service. If macOS asks for approval, Settings links straight to Login Items.
+
+### Changed
+- On displays without a notch (external monitors, a closed MacBook lid), the island is a floating pill just below the top edge, like the Dynamic Island, instead of a fake notch. It stays hidden while idle and appears on hover, while music plays, and for battery alerts.
+- The app icon uses the full BRIM design at every size, including Finder lists and Login Items.
+
+### Fixed
+- On Macs without a notch, Brim now always uses the main display (the one with the menu bar). It used to follow whichever screen had focus when displays changed.
+
 ## [0.5.2] - 2026-10-27
 
 ### Added

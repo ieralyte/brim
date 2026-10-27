@@ -4,7 +4,7 @@
 
 A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a live strip for media, files and battery status, and puts Now Playing on your lock screen.
 
-> **Status: v0.5, early development.** See [the roadmap](docs/ROADMAP.md).
+> **Status: v0.5, early development.** See [the roadmap](docs/ROADMAP.md) and [changelog](CHANGELOG.md).
 
 ## Features
 
@@ -12,15 +12,90 @@ A free, open-source Dynamic Island for MacBooks. Brim turns the notch into a liv
 - **Now Playing.** Artwork, title, artist, a scrubber and controls for Apple Music, Spotify, Tidal and browser players. While music plays, the closed island shows the artwork and a live waveform.
 - **File tray.** Drag files onto the notch to hold them, then drag them out wherever you need them. Double-click to open; the tray survives restarts.
 - **Battery.** A brief charging notice when you plug in, low-battery alerts at 20% and 10%, and the battery level in the open island.
-- **Lock screen.** Now Playing with controls, and your battery level, before you log in. Brim can keep the lock screen lit while music plays (or always), instead of macOS turning it off after about 30 seconds. Both are in Settings.
+- **Lock screen.** Now Playing with controls, a song progress bar and your battery level, before you log in. Brim can keep the lock screen lit while music plays (or always), instead of macOS turning it off after about 30 seconds.
 
 ## Requirements
 
 - macOS 26 Tahoe or later
-- A Mac with Apple silicon (notched MacBooks get the full effect; other displays show a small pill)
-- Xcode 26 to build from source
+- A Mac with Apple silicon. Notched MacBooks get the full effect; on other displays Brim floats a pill just below the top centre of the screen, hidden until you hover there or something is playing.
 
-## Build and run
+Brim asks for no permissions: no Accessibility, Screen Recording or Automation access.
+
+## Install
+
+Pick **one** of these. Both give you the same app.
+
+### Option 1: Download the DMG
+
+1. Go to [Releases](https://github.com/ieralyte/brim/releases) and download the latest `Brim-<version>.dmg`.
+2. Open the DMG and drag **Brim** onto **Applications**.
+3. Eject the DMG, then follow [First launch](#first-launch) below.
+
+### Option 2: Homebrew
+
+```sh
+brew install --cask ieralyte/brim/brim
+```
+
+Then follow [First launch](#first-launch) below.
+
+## First launch
+
+Brim is free and isn't notarized by Apple (that needs a paid developer account), so macOS blocks it the first time you open it. You only do this once per version.
+
+1. Open **Brim** from Applications. macOS says it can't verify the developer. Click **Done** (not Move to Bin).
+2. Open **System Settings → Privacy & Security**, scroll down to the Security section and click **Open Anyway** next to the Brim message.
+3. Click **Open Anyway** again in the dialog and enter your password or use Touch ID.
+
+<details>
+<summary>Prefer Terminal?</summary>
+
+This removes the download quarantine flag, which has the same effect as **Open Anyway**:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Brim.app
+open /Applications/Brim.app
+```
+</details>
+
+## Using Brim
+
+Brim has **no Dock icon and no window** when it starts. That's normal.
+
+- **Hover over the notch** to open the island. Move the pointer away to close it.
+- **Settings and Quit** are in the menu bar icon (a small rectangle with a filled top). On a busy menu bar, macOS can hide icons behind the notch; quit a few other menu bar apps if you can't see it, or hold **⌘** and drag other icons out of the way.
+- **Lock screen** options (show on lock screen, keep the screen on while locked) are in Settings. **Settings → Diagnostics** shows whether Now Playing and the lock screen are working on your Mac.
+- **Start at login:** turn on **Start Brim at login** in Brim's Settings. It then appears under **System Settings → General → Login Items & Extensions**, where you can also turn it off.
+
+## Update
+
+- **DMG:** quit Brim from the menu bar, download the new DMG and drag Brim to Applications, replacing the old copy. Then repeat [First launch](#first-launch) once.
+- **Homebrew:** `brew upgrade --cask brim`, then repeat [First launch](#first-launch) once.
+
+## Uninstall
+
+1. Quit Brim from its menu bar icon.
+2. Drag **Brim** from Applications to the Bin, or run `brew uninstall --cask brim` if you used Homebrew.
+3. Optionally remove its settings and file tray list: `defaults delete io.github.brim.Brim` (Homebrew users can use `brew uninstall --zap --cask brim` to do steps 2 and 3 together).
+
+The file tray only holds references, so your files themselves are never touched.
+
+## Troubleshooting
+
+| Problem | Try this |
+| --- | --- |
+| "Brim is damaged and can't be opened" or the app won't open at all | Use the Terminal command under [First launch](#first-launch). |
+| Nothing happens when I hover over the notch | Check Brim is running (menu bar icon). With the lid closed or on an external display there is no notch: hover the top centre of the main display and the island opens there. It stays hidden while idle. |
+| Now Playing is empty | Start playback in the player app first, then check **Settings → Diagnostics**. A macOS update can break the private API it relies on; the rest of Brim keeps working. |
+| Nothing on the lock screen | Make sure **Show on lock screen** is on in Settings and check **Settings → Diagnostics**. |
+
+If none of that helps, [open an issue](https://github.com/ieralyte/brim/issues) with your macOS version and what Diagnostics shows.
+
+## Build from source
+
+You need **Xcode 26 or later** (free from the App Store). No Apple Developer account is needed: the project signs locally ("Sign to Run Locally"), and apps you build yourself don't trigger the [First launch](#first-launch) prompt.
+
+### Run from Xcode
 
 ```sh
 git clone https://github.com/ieralyte/brim.git
@@ -28,49 +103,22 @@ cd brim
 open Brim.xcodeproj
 ```
 
-Press **Run** (⌘R) in Xcode. No Apple Developer account is needed: the project signs locally ("Sign to Run Locally").
+Choose the **Brim** scheme and **My Mac**, then press **Run** (⌘R). Brim appears in the menu bar; hover over the notch. Stopping the run in Xcode quits Brim.
 
-Brim has no Dock icon. Look for its icon in the menu bar for Settings and Quit, then hover over the notch.
+### Build a standalone copy
 
-From the command line:
-
-```sh
-xcodebuild -project Brim.xcodeproj -scheme Brim -configuration Release build
-```
-
-## Install
-
-**Homebrew**
+To keep using Brim after closing Xcode, build a Release copy and put it in Applications:
 
 ```sh
-brew install --cask ieralyte/brim/brim
+xcodebuild -project Brim.xcodeproj -scheme Brim -configuration Release -derivedDataPath build build
+rm -rf /Applications/Brim.app   # remove an older copy, if you have one
+cp -R build/Build/Products/Release/Brim.app /Applications/
+open /Applications/Brim.app
 ```
 
-**Download**
+Or run `scripts/make-dmg.sh` to build the same DMG the releases use; it lands in `dist/`.
 
-Get `Brim-<version>.dmg` from [Releases](https://github.com/ieralyte/brim/releases), open it and drag Brim to Applications.
-
-**First launch**
-
-Brim is free and isn't notarized by Apple, so macOS blocks it the first time:
-
-1. Open Brim. macOS says it can't verify the developer; click **Done**.
-2. Open **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to Brim.
-3. Open Brim again and confirm. You only do this once per version.
-
-Brim has no Dock icon: look for it in the menu bar, then hover over the notch.
-
-## Releasing
-
-Releases are built by GitHub Actions (`.github/workflows/release.yml`) whenever a version tag is pushed:
-
-1. Bump `MARKETING_VERSION` in the project and add a section for it to `CHANGELOG.md`.
-2. Commit, then tag and push: `git tag -a v0.5.0 -m "Brim 0.5.0" && git push --follow-tags`.
-3. The workflow builds and ad-hoc signs Brim, packages a DMG, publishes a GitHub Release with the changelog notes, and updates the cask in [homebrew-brim](https://github.com/ieralyte/homebrew-brim).
-
-To build the same DMG locally, run `scripts/make-dmg.sh`; it lands in `dist/`.
-
-The tap update needs a `TAP_TOKEN` repository secret: a fine-grained personal access token with **Contents: read and write** on `homebrew-brim`. Without it, releases still publish and the tap step is skipped.
+If `xcodebuild` says it requires Xcode but only the Command Line Tools are selected, point it at Xcode first: `sudo xcode-select -s /Applications/Xcode.app`.
 
 ## Project layout
 
@@ -82,10 +130,12 @@ Brim/
   Features/FileTray/    File tray service and views
   Features/Battery/     Battery service, alerts and indicator
   LockScreen/           Lock screen card and the window that holds it
+  Platform/             Display wake assertion
   Platform/Private/     The only place private Apple APIs are allowed
   Resources/            Bundled resources (the media adapter's Perl loader)
 Vendor/
   MediaRemoteAdapter/   Third-party adapter source, built as an embedded framework
+scripts/make-dmg.sh     Builds, ad-hoc signs and packages a DMG
 ```
 
 ## How it works
@@ -103,6 +153,16 @@ Vendor/
 ## Contributing
 
 Issues and pull requests are welcome. Please keep private-API code inside `Platform/Private/`, behind a protocol, so a macOS update can only disable a feature, never crash the app.
+
+## Releasing
+
+For maintainers. Releases are built by GitHub Actions (`.github/workflows/release.yml`) whenever a version tag is pushed:
+
+1. Bump `MARKETING_VERSION` for the Brim target and add a section for it to `CHANGELOG.md`.
+2. Commit, then tag and push: `git tag -a vX.Y.Z -m "Brim X.Y.Z" && git push --follow-tags`.
+3. The workflow builds and ad-hoc signs Brim, packages a DMG, publishes a GitHub Release with the changelog notes, and updates the cask in [homebrew-brim](https://github.com/ieralyte/homebrew-brim).
+
+The tap update needs a `TAP_TOKEN` repository secret: a fine-grained personal access token with **Contents: read and write** on `homebrew-brim`. Without it, releases still publish but the tap step is skipped, and Homebrew users stay on the old version. To redo a release for an existing tag, run the workflow manually from the Actions tab and enter the tag.
 
 ## Acknowledgements
 

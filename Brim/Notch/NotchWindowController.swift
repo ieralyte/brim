@@ -47,7 +47,7 @@ final class NotchWindowController: NSObject {
 
     /// Picks the notched screen (or the main screen as a fallback) and pins the panel to its top centre.
     private func layoutPanel() {
-        guard let target = NSScreen.withNotch ?? NSScreen.main else { return }
+        guard let target = NSScreen.brimHome else { return }
         screen = target
 
         let closedSize = target.notchSize
@@ -61,6 +61,7 @@ final class NotchWindowController: NSObject {
             model = NotchViewModel(closedSize: closedSize, nowPlaying: nowPlaying, tray: tray, battery: battery)
             self.model = model
         }
+        model.hasHardwareNotch = target.notchSize != nil
 
         let size = CGSize(width: model.openSize.width + shadowPadding * 2,
                           height: model.openSize.height + shadowPadding)

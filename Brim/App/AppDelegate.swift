@@ -5,6 +5,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let nowPlaying = NowPlayingService()
     let tray = FileTrayService()
     let battery = BatteryService()
+    let launchAtLogin = LaunchAtLogin()
     private(set) lazy var lockScreen = LockScreenController(nowPlaying: nowPlaying, battery: battery)
     private lazy var notchController = NotchWindowController(nowPlaying: nowPlaying, tray: tray, battery: battery)
 

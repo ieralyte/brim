@@ -149,7 +149,7 @@ final class LockScreenController {
     // MARK: - Card
 
     private func show() {
-        guard isEnabled, let skyLight, let screen = NSScreen.withNotch ?? NSScreen.main else { return }
+        guard isEnabled, let skyLight, let screen = NSScreen.brimHome else { return }
         let window = self.window ?? makeWindow()
         self.window = window
 

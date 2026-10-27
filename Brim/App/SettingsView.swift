@@ -5,6 +5,7 @@ struct SettingsView: View {
     let nowPlaying: NowPlayingService
     let battery: BatteryService
     @Bindable var lockScreen: LockScreenController
+    let launchAtLogin: LaunchAtLogin
 
     private var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
@@ -36,6 +37,22 @@ struct SettingsView: View {
         Form {
             Section {
                 LabeledContent("Version", value: version)
+                Toggle("Start Brim at login", isOn: Binding(
+                    get: { launchAtLogin.isEnabled || launchAtLogin.needsApproval },
+                    set: { launchAtLogin.setEnabled($0) }
+                ))
+                if launchAtLogin.needsApproval {
+                    LabeledContent {
+                        Button("Open Login Items") { launchAtLogin.openLoginItemsSettings() }
+                    } label: {
+                        Text("Allow Brim in System Settings to finish turning this on.")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                if let message = launchAtLogin.errorMessage {
+                    Text(message)
+                        .foregroundStyle(.red)
+                }
             }
             Section {
                 Toggle("Show on lock screen", isOn: $lockScreen.isEnabled)
@@ -64,6 +81,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 460, height: 480)
+        .frame(width: 460, height: 520)
+        .onAppear { launchAtLogin.refresh() }
     }
 }

@@ -19,6 +19,10 @@ final class NotchViewModel {
     /// Size of the hardware notch, or of the fallback pill on screens without one.
     var closedSize: CGSize
 
+    /// False on displays without a notch (external monitors, a closed MacBook lid).
+    /// There the island stays hidden while idle instead of drawing a fake notch.
+    var hasHardwareNotch = true
+
     /// Size of the expanded island.
     let openSize = CGSize(width: 600, height: 190)
 
@@ -46,6 +50,12 @@ final class NotchViewModel {
         return nowPlaying.isPlaying ? .nowPlaying : nil
     }
 
+    /// Whether the island is drawn at all. On a real notch it always is (it covers the notch);
+    /// elsewhere only when open, or while something is live beside it.
+    var isIslandVisible: Bool {
+        isOpen || hasHardwareNotch || liveActivity != nil
+    }
+
     var wingWidth: CGFloat { closedSize.height + 12 }
 
     /// The closed island, including the wings either side of the notch when an activity is showing.
@@ -58,7 +68,13 @@ final class NotchViewModel {
     var currentSize: CGSize { isOpen ? openSize : closedDisplaySize }
 
     /// Corner radius of the outward "ears" where the island meets the top of the screen.
-    var earRadius: CGFloat { isOpen ? 14 : 6 }
+    var earRadius: CGFloat {
+        guard hasHardwareNotch else { return 0 } // a floating pill has no ears
+        return isOpen ? 14 : 6
+    }
+
+    /// Gap between the top of the screen and a floating pill, on displays without a notch.
+    var floatInset: CGFloat { hasHardwareNotch ? 0 : 3 }
 
     /// Corner radius of the island's bottom corners.
     var bottomRadius: CGFloat { isOpen ? 28 : 12 }
